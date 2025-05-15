@@ -121,4 +121,13 @@ public class ConfConfiguration {
     public void save(Path destination) throws IOException {
         Files.write(destination, lines);
     }
+
+    public void save(OutputStream os) throws IOException {
+        OutputStreamWriter osw = new OutputStreamWriter(os);
+        for (String line : lines) {
+            osw.write(line);
+            osw.write('\n');
+        }
+        osw.flush();
+    }
 }
