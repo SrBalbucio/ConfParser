@@ -1,15 +1,18 @@
 package balbucio.confparser;
 
+import lombok.Getter;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
 
 public class ConfConfiguration {
-    private final List<String> lines = new ArrayList<>();
+
     private static final Pattern pattern = Pattern.compile("^([ \\t]*)(#?)[ \\t]*([a-zA-Z0-9_.-]+)[ \\t]*=[ \\t]*([^#\\n\\r]*)([ \\t]*#?.*)?$");
 
-    // === CONSTRUCTORS ===
+    @Getter
+    private final List<String> lines = new ArrayList<>();
 
     public ConfConfiguration(InputStream is) throws IOException {
         load(new BufferedReader(new InputStreamReader(is)));
@@ -129,5 +132,11 @@ public class ConfConfiguration {
             osw.write('\n');
         }
         osw.flush();
+    }
+
+    public InputStream toInputStream() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        save(baos);
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 }
